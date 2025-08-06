@@ -1,21 +1,16 @@
 import { Toast } from 'primereact/toast';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { AppContextType, CustomResponse } from '../types';
+import { AppContextType } from '../types';
 import eventEmitter from '../api/event';
-import { GetCall } from '../api/ApiKit';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
 import { useTokenExpiryAlert } from '../hooks/useTokenExpiryAlert';
 import { Button } from 'primereact/button';
 import axios from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { isTokenValid } from '../utils/utils';
 import { logout, setAuthRefreshToken, setAuthToken } from '../redux/slices/authSlice';
 import { CONFIG } from '../config/config';
-
-let axiosRef: string | null = null;
 
 const defaultContext: AppContextType = {
     isLoading: true,
@@ -28,11 +23,8 @@ const defaultContext: AppContextType = {
 };
 const AppContext = createContext(defaultContext);
 
-const authRoutes = ['/login', '/signup', '/reset-password', '/forgot-password', '/delete-account'];
-
 export const AppWrapper = React.memo(({ children }: any) => {
-    const [searchParams] = useSearchParams();
-    const naviagte = useRouter();
+    const dialogRef = useRef<any>(null);
     const [isLoading, setLoading] = useState(false);
     const [isScroll, setScroll] = useState(false);
 
@@ -43,6 +35,9 @@ export const AppWrapper = React.memo(({ children }: any) => {
 
     useEffect(() => {
         eventEmitter.on('signOut', (data: any) => {
+            if (dialogRef.current) {
+                dialogRef.current.hide();
+            }
             signOut();
             setAlert('info', 'Session expired')
         });
@@ -104,9 +99,12 @@ export const AppWrapper = React.memo(({ children }: any) => {
 
     const showTokenExpiryAlert = () => {
         if (!isLoggedIn || !user) {
+            if (dialogRef.current) {
+                dialogRef.current.hide();
+            }
             return;
         }
-        confirmDialog({
+        dialogRef.current = confirmDialog({
             message: `Your session is about to expire. Click Refresh to stay connected or Logout.`,
             header: "Session Expiring",
             icon: "pi pi-exclamation-triangle text-red",
