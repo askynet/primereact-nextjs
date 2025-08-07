@@ -15,7 +15,7 @@ export default function TerminalPage() {
             <div className="mb-4">
                 {isLoggedIn ? (
                     <>
-                        <p>Welcome, {user}</p>
+                        <p>Welcome</p>
                         <Button label="Logout" onClick={() => dispatch(logout())} />
                     </>
                 ) : (

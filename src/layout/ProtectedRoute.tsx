@@ -26,7 +26,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
             }
             let returnUrl = `${pathname}?${searchParams.toString()}`
             if (returnUrl) {
-                let arr = returnUrl.split('?')
+                const arr = returnUrl.split('?')
                 if (authRoutes.includes(arr[0])) {
                     returnUrl = '/';
                 }

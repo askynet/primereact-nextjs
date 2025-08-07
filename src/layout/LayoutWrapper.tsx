@@ -64,7 +64,7 @@ export const LayoutWrapper = React.memo(({ children }: any) => {
     const [bindMenuOutsideClickListener, unbindMenuOutsideClickListener] = useEventListener({
         type: 'click',
         listener: (event: any) => {
-            let isOutsideClicked = event.target.classList.contains("layout-mask");
+            const isOutsideClicked = event.target.classList.contains("layout-mask");
             if (isOutsideClicked) {
                 hideMenu();
             }

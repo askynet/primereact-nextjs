@@ -23,7 +23,7 @@ class CustomError extends Error {
 }
 
 // Create axios client, pre-configured with baseURL
-let APIKit: any = axios.create({
+const APIKit: any = axios.create({
     baseURL: CONFIG.BASE_URL,
     timeout: 60000
 });
@@ -43,12 +43,12 @@ APIKit.interceptors.response.use(
         }
         else if (response.error) {
             if (!response.error.includes('Error: timeout')) {
-                let { code, msg, keys = [] }: any = parseError(response);
+                const { code, msg, keys = [] }: any = parseError(response);
                 throw new CustomError({ code: code, error: msg, keys: keys, });
             }
         } else if (response) {
             if (response.code === 'AUTH_FAILED') {
-                let { code, msg }: any = parseError(response);
+                const { code, msg }: any = parseError(response);
                 throw new CustomError({ code: code, error: msg, });
             }
             return response;
@@ -116,18 +116,18 @@ APIKit.interceptors.response.use(
         }
 
         if (get(error, 'response') && get(error, 'response.data')) {
-            let response = get(error, 'response.data');
+            const response = get(error, 'response.data');
             if (response.code && !['SUCCESS', 'RESET_PASSWORD'].includes(response.code)) {
                 throw new CustomError({ code: response.code, error: response.message || response.error || response.code, keys: response.keys || [], });
             }
             else if (response.error) {
                 if (!response.error.includes('Error: timeout')) {
-                    let { code, msg, keys = [] }: any = parseError(response);
+                    const { code, msg, keys = [] }: any = parseError(response);
                     throw new CustomError({ code: code, error: msg, keys: keys, });
                 }
             } else if (response) {
                 if (response.code === 'AUTH_FAILED') {
-                    let { code, msg }: any = parseError(response);
+                    const { code, msg }: any = parseError(response);
                     throw new CustomError({ code: code, error: msg, });
                 }
                 return response;

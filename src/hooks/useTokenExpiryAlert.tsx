@@ -3,7 +3,7 @@ import { getTokenExpiry } from "../utils/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 
-export const useTokenExpiryAlert = (showAlert: () => void, alertBeforeMs: number = 60000) => {
+export const useTokenExpiryAlert = (showAlert: (forceLogout?: boolean) => void, alertBeforeMs: number = 60000) => {
     const { isLoggedIn } = useSelector((state: RootState) => state.auth);
     useEffect(() => {
         if (!isLoggedIn) {
@@ -13,8 +13,13 @@ export const useTokenExpiryAlert = (showAlert: () => void, alertBeforeMs: number
         if (!expiryTime) return;
 
         const now = Date.now();
-        const timeout = expiryTime - now - alertBeforeMs;
 
+        if (expiryTime < now) {
+            showAlert(true);
+            return;
+        }
+
+        const timeout = expiryTime - now - alertBeforeMs;
         if (timeout <= 0) {
             showAlert();
             return;

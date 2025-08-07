@@ -61,7 +61,7 @@ const ResetPasswordPage = () => {
                     <div className="align-items-center mb-4">
                         <div className='flex'>
                             <div>
-                                <p className="text-2xl font-medium text-900 mb-0">Hi, We're almost there!</p>
+                                <p className="text-2xl font-medium text-900 mb-0">Hi, We are almost there!</p>
                                 <p className='text-md'>Please set new password to your account.</p>
                             </div>
                         </div>

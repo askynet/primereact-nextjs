@@ -8,7 +8,7 @@ const parseError = async (error: any) => {
             return await authFailed();
         }
         if (get(error, 'response.data.message') || get(error, 'response.data.error')) {
-            let msg = get(error, 'response.data.message') ? get(error, 'response.data.message') : get(error, 'response.data.error');
+            const msg = get(error, 'response.data.message') ? get(error, 'response.data.message') : get(error, 'response.data.error');
             return { code: error.response.data.code, msg: msg };
         }
         else {

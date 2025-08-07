@@ -34,10 +34,9 @@ export const AppWrapper = React.memo(({ children }: any) => {
     const { isLoggedIn, authToken, authRefreshToken, user, permissions } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
+        hideExpiryDialog();
         eventEmitter.on('signOut', (data: any) => {
-            if (dialogRef.current) {
-                dialogRef.current.hide();
-            }
+            hideExpiryDialog();
             signOut();
             setAlert('info', 'Session expired')
         });
@@ -48,7 +47,15 @@ export const AppWrapper = React.memo(({ children }: any) => {
         });
     }, [])
 
+    const hideExpiryDialog = () => {
+        if (dialogRef.current) {
+            console.log('hide dialog')
+            dialogRef.current.hide();
+        }
+    }
+
     const signOut = async (isManual = false) => {
+        hideExpiryDialog();
         dispatch(logout())
     }
 
@@ -97,11 +104,12 @@ export const AppWrapper = React.memo(({ children }: any) => {
         </div>
     );
 
-    const showTokenExpiryAlert = () => {
+    const showTokenExpiryAlert = (forceLogout?: boolean) => {
+        if (forceLogout) {
+            signOut()
+        }
         if (!isLoggedIn || !user) {
-            if (dialogRef.current) {
-                dialogRef.current.hide();
-            }
+            hideExpiryDialog();
             return;
         }
         dialogRef.current = confirmDialog({
