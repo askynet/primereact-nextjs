@@ -18,7 +18,6 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
     useEffect(() => {
         const isValid = isTokenValid(authToken);
-        // console.log('pathname', pathname, isValid)
 
         if (!isValid) {
             if (authRoutes.includes(pathname)) {
@@ -28,10 +27,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
             if (returnUrl) {
                 const arr = returnUrl.split('?')
                 if (authRoutes.includes(arr[0])) {
-                    returnUrl = '/';
+                    returnUrl = '';
                 }
             }
-            navigate.push(`/login?returnUrl=${returnUrl}`);
+            navigate.push(`/login${returnUrl != '/' ? `?returnUrl=${returnUrl}` : ''}`);
         }
         else if (authToken && isValid && authRoutes.includes(pathname) && !['/delete-account'].includes(pathname)) {
             const returnUrl = searchParams.get('returnUrl') || `/`;

@@ -9,6 +9,11 @@
 @import './sidebar';
 @import './table';
 
+:root {
+    --sidebar-bg: #fff;
+    --border-light: #dfe7ef;
+    --hover-bg: #f0f3f8 !important;
+}
 
 html {
     font-size: 13px;
@@ -17,17 +22,12 @@ html {
 body {
     font-family: var(--font-family);
     color: var(--text-color);
-    background-color: var(--surface-ground);
+    background-color: #f0f3f8;
     margin: 0;
     padding: 0;
     min-height: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-}
-
-:root {
-    --sidebar-bg: #fff;
-    --border-light: #f3f3f3;
 }
 
 a {
@@ -62,7 +62,7 @@ a {
 .page-container,
 .page-container-projects {
     height: 100vh;
-    background: var(--surface-ground);
+    background: #f0f3f8;
 }
 
 .container-box {
@@ -165,4 +165,8 @@ a {
 .scroll-box {
     overflow: auto !important;
     height: 92vh;
+}
+
+.border-light {
+    border-color: var(--border-light);
 }

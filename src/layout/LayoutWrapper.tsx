@@ -1,9 +1,8 @@
 import React from 'react';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { LayoutContextProps, LayoutState } from '../types';
 import { useEventListener } from 'primereact/hooks';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
 
 const defaultContext: LayoutContextProps = {
     layoutState: {
@@ -11,7 +10,7 @@ const defaultContext: LayoutContextProps = {
         isMobile: false,
         isSidebar: true,
         overlayMenuActive: false,
-        isSidebarBroken: false
+        isSidebarBroken: true
     },
     setLayoutState: () => { },
     onMenuToggle: () => { },

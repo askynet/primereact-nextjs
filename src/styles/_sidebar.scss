@@ -5,11 +5,11 @@
 
     .ps-menu-button:hover {
         span {
-            color: var(--sidebar-p-color);
+            color: var(--primary-color);
         }
 
         .ps-submenu-expand-icon {
-            color: var(--sidebar-p-color);
+            color: var(--primary-color);
         }
     }
 
@@ -20,12 +20,13 @@
     }
 
     .ps-menuitem-root.ps-active span i {
-        color: var(--sidebar-p-color);
+        color: var(--primary-color);
     }
 
     .ps-menuitem-root.only-icon-menu .ps-menu-icon.ps-active {
         background-color: var(--hover-bg) !important;
         border-radius: 5px !important;
+        color: var(--primary-color)!important
     }
 
     .border-light {

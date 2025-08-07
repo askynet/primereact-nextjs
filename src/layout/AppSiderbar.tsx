@@ -20,8 +20,8 @@ const themes = {
             icon: '#8e8eaa',
             hover: {
                 backgroundColor: '#f6f6fa',
-                color: '#4b47f6',
-                icon: '#4b47f6',
+                color: 'var(--primary-color)',
+                icon: 'var(--primary-color)',
             },
             disabled: {
                 color: '#9fb6cf',
@@ -39,8 +39,8 @@ const themes = {
             color: '#a6b0cf',
             hover: {
                 backgroundColor: '#212135',
-                color: '#fff',
-                icon: '#fff',
+                color: 'var(--primary-color)',
+                icon: 'var(--primary-color)',
             },
             disabled: {
                 color: '#3e5e7e',
@@ -177,7 +177,7 @@ const AppSidebar = () => {
                 collapsed={layoutState.isSidebarBroken}
                 toggled={layoutState.overlayMenuActive}
                 onBackdropClick={() => onMenuToggle()}
-                onBreakPoint={() => showSidebar(!layoutState.isSidebar)}
+                onBreakPoint={(value) => showSidebar(!value)}
                 backgroundColor={hexToRgba(themes[theme].sidebar.backgroundColor, 1)}
                 breakPoint="md"
                 rootStyles={{

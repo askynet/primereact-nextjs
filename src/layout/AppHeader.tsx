@@ -1,16 +1,12 @@
-import { classNames } from 'primereact/utils';
-import React, { forwardRef, ReactNode, useContext, useImperativeHandle, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Avatar } from 'primereact/avatar';
 import { Menu } from 'primereact/menu';
-import { confirmDialog, ConfirmDialog } from 'primereact/confirmdialog';
+import { confirmDialog } from 'primereact/confirmdialog';
 import { useAppContext } from './AppWrapper';
-import { capitalize, get } from 'lodash';
+import { get } from 'lodash';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { IconField } from 'primereact/iconfield';
-import moment from 'moment-timezone';
 import { useLayoutContext } from './LayoutWrapper';
-import { PrimeReactContext } from 'primereact/api';
 import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -151,7 +147,7 @@ const AppHeader = (props: AppHeaderProps) => {
                             <div className="header__profile flex align-items-center">
                                 <div className="dropdown d-inline-block">
                                     <div className="header__profile--btn dropdowntoggle cursor-pointer flex align-items-center gap-2" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" onClick={avatrClick} >
-                                        <Avatar label={get(user, 'firstName') ? get(user, 'firstName')[0] : 'U'} style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} shape="circle" />
+                                        <Avatar label={getDisplayName(user)[0]} style={{ backgroundColor: '#9c27b0', color: '#ffffff' }} shape="circle" />
                                     </div>
                                     <Menu model={items} popup ref={menu} style={{ marginTop: 15 }} />
                                 </div>
