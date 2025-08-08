@@ -3,13 +3,10 @@ import React from 'react';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { AppContextType } from '../types';
 import eventEmitter from '../api/event';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store';
-import { useTokenExpiryAlert } from '../hooks/useTokenExpiryAlert';
-import { Button } from 'primereact/button';
-import axios from 'axios';
-import { logout, setAuthRefreshToken, setAuthToken } from '../redux/slices/authSlice';
+import { logout, setAuthToken } from '../redux/slices/authSlice';
 import { CONFIG } from '../config/config';
 
 const defaultContext: AppContextType = {
@@ -24,7 +21,6 @@ const defaultContext: AppContextType = {
 const AppContext = createContext(defaultContext);
 
 export const AppWrapper = React.memo(({ children }: any) => {
-    const dialogRef = useRef<any>(null);
     const [isLoading, setLoading] = useState(false);
     const [isScroll, setScroll] = useState(false);
 
@@ -42,9 +38,7 @@ export const AppWrapper = React.memo(({ children }: any) => {
     }, [authRefreshToken])
 
     useEffect(() => {
-        hideExpiryDialog();
         eventEmitter.on('signOut', (data: any) => {
-            hideExpiryDialog();
             signOut();
             setAlert('Session expired')
         });
@@ -55,14 +49,7 @@ export const AppWrapper = React.memo(({ children }: any) => {
         });
     }, [])
 
-    const hideExpiryDialog = () => {
-        if (dialogRef.current) {
-            dialogRef.current.hide();
-        }
-    }
-
     const signOut = async (isManual = false) => {
-        hideExpiryDialog();
         dispatch(logout())
     }
 
@@ -72,65 +59,6 @@ export const AppWrapper = React.memo(({ children }: any) => {
         }
         toastRef.current.show({ severity: type, detail: message || (type == 'error' ? 'Failed' : ''), life: 3000 });
     }
-
-    const refreshAuthToken = async () => {
-        try {
-            const refreshToken = authRefreshToken;
-            if (!refreshToken) {
-                throw new Error('No refresh token available');
-            }
-
-            // Make the refresh token request
-            const response = await axios.post(`${CONFIG.BASE_URL}/auth/refresh-token`, {
-                refreshToken,
-            })
-
-            const { data } = response.data;
-
-            if (data.token) {
-                dispatch(setAuthToken((data.token)))
-            }
-            if (data.refreshToken) {
-                dispatch(setAuthRefreshToken(data.refreshToken))
-            }
-        } catch (error: any) {
-            setAlert(error.message)
-        }
-    }
-
-    const footer = (callback: any) => (
-        <div className="flex justify-content-end gap-1 mt-1 mb-1">
-            <Button label="Logout" icon="pi pi-sign-out" severity="danger" size="small" onClick={() => {
-                signOut()
-                callback.reject();
-            }} />
-            <Button label="Refresh" icon="pi pi-refresh" size="small" onClick={() => {
-                refreshAuthToken()
-                callback.accept();
-            }} />
-        </div>
-    );
-
-    const showTokenExpiryAlert = (forceLogout?: boolean) => {
-        if (forceLogout) {
-            signOut()
-        }
-        if (!isLoggedIn || !user) {
-            hideExpiryDialog();
-            return;
-        }
-        dialogRef.current = confirmDialog({
-            message: `Your session is about to expire. Click Refresh to stay connected or Logout.`,
-            header: "Session Expiring",
-            icon: "pi pi-exclamation-triangle text-red",
-            position: 'top-right',
-            style: { width: '30vw' },
-            breakpoints: { '1100px': '30vw', '960px': '100vw' },
-            footer: footer
-        });
-    };
-    // 2 min before expiry
-    useTokenExpiryAlert(showTokenExpiryAlert, 2 * 60 * 1000);
 
     return (
         <AppContext.Provider value={{
