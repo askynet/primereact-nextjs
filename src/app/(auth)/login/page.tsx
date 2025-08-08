@@ -14,7 +14,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { login, setPermissions } from '@/src/redux/slices/authSlice';
 import Link from 'next/link';
 import { Button } from 'primereact/button';
-import { CONFIG } from '@/src/config/config';
+import { CONFIG, DUMMY_TOKEN } from '@/src/config/config';
 
 interface User {
     id: any;
@@ -47,9 +47,20 @@ const LoginPage = () => {
             return;
         }
 
+        dispatch(login({
+            token : DUMMY_TOKEN,
+            refreshToken: DUMMY_TOKEN,
+            user: {
+                userId: 1,
+                displayName: 'Akash Ahire',
+                firstName: 'Akash'
+            }
+        }));
+        return;
+
         if (email && password) {
             setLoading(true);
-            const resoponse: any = await PostCall('/auth/portal-sign-in', { email, password });
+            const resoponse: any = await PostCall('/auth/sign-in', { email, password });
             setLoading(false);
             if (resoponse.code == 'SUCCESS') {
                 setAlert('Login success!!', 'success');

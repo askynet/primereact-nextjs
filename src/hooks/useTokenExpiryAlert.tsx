@@ -18,13 +18,16 @@ export const useTokenExpiryAlert = (showAlert: (forceLogout?: boolean) => void, 
             showAlert(true);
             return;
         }
-
-        const timeout = expiryTime - now - alertBeforeMs;
+        let timeout = expiryTime - now - alertBeforeMs;
         if (timeout <= 0) {
             showAlert();
             return;
         }
 
+        // max number supported by setTimeout
+        if (timeout > 2147483647) {
+            timeout = 2147483647;
+        }
         const timer = setTimeout(() => {
             showAlert();
         }, timeout);
